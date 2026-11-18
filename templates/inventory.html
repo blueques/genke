@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start;">
+  <div class="card">
+    <h1 style="margin-top:0;">Inventory Catalog</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>SKU</th><th>Product</th><th>Category</th><th>Price (KES)</th><th>Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td class="mono">{{ p.sku }}</td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.category }}</td>
+          <td class="mono">{{ p.selling_price }}</td>
+          <td class="mono">{{ p.stock_qty }} {{ p.unit }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if user.role == 'admin' or user.role == 'staff' %}
+  <div class="card">
+    <h2 style="margin-top:0;">Add Product</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary" style="width:100%;">Save Product</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

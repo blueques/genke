@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="receipt-sheet">
+  <div style="text-align:center;border-bottom:1px dashed #94a3b8;padding-bottom:10px;margin-bottom:10px;">
+    <strong style="font-size:15px;">{{ business.business_name }}</strong><br />
+    {{ business.location }}<br />
+    Tel: {{ business.phone }}<br />
+    KRA PIN: {{ business.kra_pin }} | Till: {{ business.mpesa_till }}
+  </div>
+  <div>
+    Receipt: {{ sale.receipt_number }}<br />
+    Date: {{ sale.created_at|date:"d/m/Y H:i" }}<br />
+    Cashier: {{ sale.cashier_name }}<br />
+    Customer: {{ sale.customer_name }}
+  </div>
+  <hr style="border:none;border-top:1px dashed #94a3b8;margin:10px 0;" />
+  {% for item in sale.items.all %}
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+      <span>{{ item.product_name }} x{{ item.quantity }}</span>
+      <span>KES {{ item.line_total }}</span>
+    </div>
+  {% endfor %}
+  <hr style="border:none;border-top:1px dashed #94a3b8;margin:10px 0;" />
+  <div style="display:flex;justify-content:space-between;"><span>Subtotal</span><span>KES {{ sale.subtotal }}</span></div>
+  <div style="display:flex;justify-content:space-between;"><span>VAT ({{ business.vat_rate }}%)</span><span>KES {{ sale.vat_amount }}</span></div>
+  <div style="display:flex;justify-content:space-between;font-weight:700;font-size:14px;margin-top:4px;"><span>TOTAL</span><span>KES {{ sale.total_amount }}</span></div>
+  <div style="margin-top:8px;">Payment: {{ sale.get_payment_method_display }} {% if sale.mpesa_ref %}({{ sale.mpesa_ref }}){% endif %}</div>
+  <div style="text-align:center;margin-top:14px;border-top:1px dashed #94a3b8;padding-top:10px;">
+    {{ business.receipt_footer }}<br />
+    Powered by Gen.ke POS
+  </div>
+</div>
+<div class="no-print" style="text-align:center;margin-top:12px;">
+  <button type="button" class="btn btn-primary" onclick="window.print()">Print Receipt</button>
+  <a class="btn" href="{% url 'pos_terminal' %}">New Sale</a>
+</div>
+{% endblock %}

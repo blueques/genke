@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width:420px;margin:64px auto;">
+  <div class="card" style="padding:28px;">
+    <h1 style="margin:0 0 6px;">Gen.ke POS</h1>
+    <p style="margin:0 0 20px;color:#64748b;font-size:0.9rem;">Sign in with your staff email and password.</p>
+    <form method="post">
+      {% csrf_token %}
+      <label>Email</label>
+      {{ form.email }}
+      <label>Password</label>
+      {{ form.password }}
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px;">Sign In</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

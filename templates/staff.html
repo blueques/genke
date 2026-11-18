@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start;">
+  <div class="card">
+    <h1 style="margin-top:0;">Staff Members</h1>
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Role</th><th>Phone</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for member in staff_members %}
+        <tr>
+          <td>{{ member.full_name }}</td>
+          <td>{{ member.email }}</td>
+          <td>{{ member.get_role_display }}</td>
+          <td class="mono">{{ member.phone }}</td>
+          <td>{{ member.is_active|yesno:"Active,Disabled" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h2 style="margin-top:0;">Add Staff Member</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary" style="width:100%;">Create Staff Account</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gen.ke — {{ business.business_name|default:"Kenya POS" }}</title>
+  <link rel="stylesheet" href="{% static 'css/genke.css' %}" />
+</head>
+<body>
+  {% if user.is_authenticated %}
+  <header class="topbar">
+    <a class="brand" href="{% url 'pos_terminal' %}">Gen.ke</a>
+    <nav class="nav-links">
+      <a href="{% url 'pos_terminal' %}">POS Terminal</a>
+      <a href="{% url 'inventory' %}">Inventory</a>
+      {% if user.role == 'admin' %}
+        <a href="{% url 'staff' %}">Staff</a>
+        <a href="{% url 'reports' %}">Reports</a>
+        <a href="{% url 'settings' %}">Business Setup</a>
+      {% endif %}
+    </nav>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-size:0.85rem;color:#475569;">{{ user.full_name }} · {{ user.get_role_display }}</span>
+      <a class="btn" href="{% url 'logout' %}">Sign Out</a>
+    </div>
+  </header>
+  {% endif %}
+  <main class="container">
+    {% if messages %}
+      {% for msg in messages %}
+        <div class="card" style="margin-bottom:16px;border-color:#047857;">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <script src="{% static 'js/pos.js' %}"></script>
+</body>
+</html>

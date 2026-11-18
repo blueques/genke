@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+  <h1 style="margin:0;">Sales Reports (Last {{ days }} Days)</h1>
+  <a class="btn btn-primary" href="{% url 'export_sales_csv' %}">Download CSV</a>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+  <div class="card">
+    <div style="color:#64748b;font-size:0.85rem;">Total Revenue</div>
+    <div class="mono" style="font-size:1.5rem;font-weight:700;">KES {{ total_revenue }}</div>
+  </div>
+  <div class="card">
+    <div style="color:#64748b;font-size:0.85rem;">Total VAT Collected</div>
+    <div class="mono" style="font-size:1.5rem;font-weight:700;">KES {{ total_vat }}</div>
+  </div>
+  <div class="card">
+    <div style="color:#64748b;font-size:0.85rem;">Transactions</div>
+    <div class="mono" style="font-size:1.5rem;font-weight:700;">{{ transaction_count }}</div>
+  </div>
+</div>
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>Receipt</th><th>Date</th><th>Cashier</th><th>Method</th><th>Total (KES)</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      {% for sale in sales %}
+      <tr>
+        <td class="mono">{{ sale.receipt_number }}</td>
+        <td class="mono">{{ sale.created_at|date:"Y-m-d H:i" }}</td>
+        <td>{{ sale.cashier_name }}</td>
+        <td>{{ sale.get_payment_method_display }}</td>
+        <td class="mono">{{ sale.total_amount }}</td>
+        <td><a href="{% url 'receipt_detail' sale.id %}">View Receipt</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
